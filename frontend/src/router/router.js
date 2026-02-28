@@ -12,6 +12,11 @@ const router = createRouter({
             path: '/skills',
             component: () => import('@/pages/skills/index.vue'),
             name: 'skill.index'
+        },
+        {
+            path: '/skills/:id',
+            component: () => import('@/pages/skills/show.vue'),
+            name: 'skill.show'
         }
     ]
 })

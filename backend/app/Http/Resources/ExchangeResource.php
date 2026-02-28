@@ -22,7 +22,8 @@ class ExchangeResource extends JsonResource
             'receiver' => $this->receiver->name,
             'skill_id' => $this->skill_id,
             'skill' => $this->skill->title,
-            'status' => $this->status
+            'status' => $this->status,
+            'created_at' => $this->created_at->format('d.m.Y H:i'),
         ];
     }
 }

@@ -17,13 +17,14 @@ class SkillResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->when(Route::currentRouteName() == 'skill.show', $this->user->name),
+            'user' => $this->user->name,
             'user_id' => $this->user->id,
             'title' => $this->title,
-            'description' => $this->when(Route::currentRouteName() == 'skill.show', $this->description),
+            'description' => $this->description,
             'category_id' => $this->category->id,
-            'category' => $this->when(Route::currentRouteName() == 'skill.show', $this->category->title),
-            "type" => $this->type
+            'category' => $this->category->title,
+            'type' => $this->type,
+            'created_at' => $this->created_at->format('d.m.Y H:i'),
         ];
     }
 }
