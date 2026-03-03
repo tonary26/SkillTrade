@@ -16,30 +16,35 @@ export const useSkillsStore = defineStore('skills', {
   }),
 
   getters: {
-    
   },
 
   actions: {
     async getSkills () {
         try {
-            const res = await api.get('/skills')
-            this.skills = res.data.data
+            const data = await api.get('/skills')
+
+            const serverData = data.data
+
+            this.skills = serverData.data
             this.isLoaded = true
         }
         catch(error) {
-            alert('Что то пошло не так..' + error)
+            alert(error.message)
             this.isLoaded = false
         }
     },
 
     async getSkill (id) {
         try {
-            const res = await api.get(`/skills/${id}`);
-            this.skill = res.data.data
+            const data = await api.get(`/skills/${id}`);
+
+            const serverData = data.data
+
+            this.skill = serverData.data
             this.isLoaded = true
         }
         catch(error) {
-            alert('Что то пошло не так..' + error)
+            alert(error.message)
             this.isLoaded = false
         }
     }

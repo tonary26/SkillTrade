@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\RateLimiter;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * register any application services.
      */
     public function register(): void
     {

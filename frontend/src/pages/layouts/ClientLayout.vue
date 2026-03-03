@@ -1,44 +1,74 @@
 <script setup>
-  defineOptions({
-    name: 'ClientLayout'
-  })
+import {useRouter} from "vue-router"
+import {useAuthStore} from "@/stores/auth.js"
+
+defineOptions({
+  name: 'ClientLayout'
+})
+
+const store = useAuthStore()
+
+const router = useRouter()
+
+const logout = async function () {
+  await store.logout()
+
+  router.push({ name: 'dashboard.index' })
+}
+
 </script>
 
 
 <template>
-  <div class="nav-menu">
-    <div class="left">
-      <router-link
-          :to="{ name: 'dashboard.index' }"
-          class="nav-logo">
-        SkillTrade
-      </router-link>
+    <div class="nav-menu">
+      <div class="left">
+        <router-link
+            :to="{ name: 'dashboard.index' }"
+            class="nav-logo">
+          SkillTrade
+        </router-link>
+      </div>
+
+      <div class="center">
+        <router-link
+            :to="{ name: 'dashboard.index' }"
+            class="nav-btn">
+          Home
+        </router-link>
+
+        <router-link
+            :to="{ name: 'skill.index' }"
+            class="nav-btn">
+          Skills
+        </router-link>
+      </div>
+
+      <div class="right">
+        <template v-if="!store.isAuthenticated">
+          <router-link
+              :to="{ name: 'auth.login.index' }"
+              class="nav-btn">
+            Login
+          </router-link>
+
+          <router-link
+              :to="{ name: 'auth.register.index' }"
+              class="nav-btn">
+            Register
+          </router-link>
+        </template>
+
+        <a v-else
+           @click.prevent="logout()"
+           class="nav-btn">
+          Logout
+        </a>
+      </div>
     </div>
 
-    <div class="center">
-      <router-link
-          :to="{ name: 'dashboard.index' }"
-          class="nav-btn">
-        Home
-      </router-link>
-
-      <router-link
-          :to="{ name: 'skill.index' }"
-          class="nav-btn">
-        Skills
-      </router-link>
+    <div class="main">
+      <slot/>
     </div>
-
-    <div class="right">
-      <a href="#" class="nav-btn">Login</a>
-      <a href="#" class="nav-btn">Register</a>
-      <a href="#" class="nav-btn">Logout</a>
-    </div>
-  </div>
-
-  <div class="main">
-    <slot/>
-  </div>
 </template>
 
 
@@ -75,6 +105,7 @@
     color: #b2b2b2;
     font-size: 18px;
     text-decoration: none;
+    cursor: pointer;
   }
 
   .nav-btn.router-link-active {

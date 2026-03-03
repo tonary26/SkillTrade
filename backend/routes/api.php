@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Skill\SkillController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Exchange\ExchangeController;
+use App\Http\Controllers\Api\V1\ProfileController;
 
 
 Route::get('/user', function (Request $request) {
@@ -14,8 +15,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::prefix('/v1')->middleware('throttle:api')->group(function () {
-    Route::middleware('throttle:api')->group(function () {
-        Route::prefix('/categories')->group(function () {
+        Route::prefix('/categories')->middleware('auth:sanctum')->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('category.index');
             Route::post('/', [CategoryController::class, 'store'])->name('category.store');
             Route::get('/{category}', [CategoryController::class, 'show'])->name('category.show');
@@ -25,18 +25,21 @@ Route::prefix('/v1')->middleware('throttle:api')->group(function () {
 
         Route::prefix('/skills')->group(function () {
             Route::get('/', [SkillController::class, 'index'])->name('skill.index');
-            Route::post('/', [SkillController::class, 'store'])->name('skill.store');
             Route::get('/{skill}', [SkillController::class, 'show'])->name('skill.show');
-            Route::patch('/{skill}', [SkillController::class, 'update'])->name('skill.update');
-            Route::delete('/{skill}', [SkillController::class, 'destroy'])->name('skill.destroy');
+
+            Route::middleware('auth:sanctum')->group(function () {
+                Route::post('/', [SkillController::class, 'store'])->name('skill.store');
+                Route::patch('/{skill}', [SkillController::class, 'update'])->name('skill.update');
+                Route::delete('/{skill}', [SkillController::class, 'destroy'])->name('skill.destroy');
+            });
         });
 
-        Route::prefix('/exchanges')->group(function () {
+        Route::prefix('/exchanges')->middleware('auth:sanctum')->group(function () {
             Route::get('/', [ExchangeController::class, 'index'])->name('exchange.index');
             Route::post('/', [ExchangeController::class, 'store'])->name('exchange.store');
             Route::delete('/{exchange}', [ExchangeController::class, 'destroy'])->name('exchange.destroy');
         });
-    });
+
 
     Route::prefix('/auth')->group(function () {
         Route::post('/register', [AuthController::class, 'register'])
@@ -47,4 +50,6 @@ Route::prefix('/v1')->middleware('throttle:api')->group(function () {
              ->middleware('auth:sanctum')
              ->name('auth.logout');
     });
+
+    Route::get('/profile', ProfileController::class)->name('profile.show');
 });
