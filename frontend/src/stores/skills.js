@@ -8,7 +8,7 @@ export const useSkillsStore = defineStore('skills', {
         user: '',
         title: '',
         description: '',
-        category: '',
+        category_id: '',
         type: '',
         created_at: ''
     },
@@ -46,6 +46,20 @@ export const useSkillsStore = defineStore('skills', {
         catch(error) {
             alert(error.message)
             this.isLoaded = false
+        }
+    },
+
+    async addSkill (formData) {
+        try {
+            const data = await api.post('/skills', formData)
+            const serverData = data.data
+
+            this.skill = serverData.data
+
+            return data
+        }
+        catch (error) {
+            alert(error.message)
         }
     }
   },

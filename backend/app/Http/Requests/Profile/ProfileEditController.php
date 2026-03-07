@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class ProfileEditController extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,8 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:20', 'min:3'],
-            'email' => ['required', 'email', 'unique:users'],
             'bio' => ['string', 'nullable', 'min:40', 'max:300'],
             'avatar_url' => ['nullable', 'max:255'],
-            'password' => ['required', 'min:8', 'max:20']
         ];
     }
 }

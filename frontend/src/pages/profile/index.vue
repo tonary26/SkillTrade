@@ -1,50 +1,74 @@
 <script setup>
+import {onMounted} from "vue"
+import {useProfileStore} from "@/stores/profile.js"
+
+const store = useProfileStore()
+
 defineOptions({
   name: 'index'
 })
+
+onMounted(() => {
+  store.show()
+})
+
 </script>
 
 <template>
   <div class="main">
-    <div class="profile">
-
-      <div class="left">
-        <div class="avatar">
-          <img class="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJwAAACUCAMAAABRNbASAAAAaVBMVEX///8uNDb7+/sDExcoLzHq6upUWFkAAAArMTMfJiiio6QkKy0nLTDy8vIVHiHZ2toMGBsaIiXh4eIzOTuIiovOz8+BhIWpq6xgY2VvcnOanJ05PkCwsrLCw8RKT1A/REYABg2RlJR6fH1UUqySAAAEh0lEQVR4nO2ciZaqOBCGBQIkhCWAIIiA+P4POdJO38WlTRWk4szhe4L/hNReYbfb2Pjv4n5hW8UjRXWom1IqlZfN/lAVtvX8waEdhBKSccfhTOZKDO3JtqYb2eWs5FXWn3CpznVmW9kuq2XqPCWNa7tfNzkKwZ9rux6fEMfEnrZi8F4pu+EF1g6v78TP2hxHdL0VaW4Uvvyiv2GhFbs9vjCEe/IDvbbprKfNcUJydX2uq+16dsT3LnvtQR5hjNRm3VHqa7va7ECZDkyAjzqTRnTaKshHneGcLtA2b53vPfmFSlsVQrVd/QmVTbQga7ghahptWQm8cTN8pDm6SDNu/U1KE2OHGCNONhTaEoQ5zIQUiWf/JsF8hUcRYWuwk7uR7wnENagr5zgxwaVLBoQjmeGD+UtXjFhxo29cHMoFf4nrzAf/Ci2urAjE4bQRiUOenEMgLus++M4tsFbzeclH+7ldwHDiWGBeGzq2kuTCJ2RWoiiyTf+T87ndiEpL4oFCG7aGoCn6cdVXSVTzt4jvGrc02nYZpuIna5YEYFcnKDzwjex+YvMOLgnHOXtgfy6f6LTt3BJkE7IkHXSCesKUrcMvIJ5Ykff6J6Wt7Uit7WoUmuoURRvigWOqce94auHcZg7ybVIcCwuTrxtZ/LPR8jy2OEt3p/iHSCbkZHeRowrC57GMy7AxX0W/I2u79KH3L9Outb8dMZNFTeiJmP8Ly89hE32GtBnX7+tgHLuy7Lox2PfJ5y0NJUVR+P7n6drY2Nj4X+Im/jsSG7EiqU77S9sE72ia9rI/ZXQK/aruvFQIKWP2llhKkafesK/MT752SV+X5xzcs45Tb6x7s71Nf+okdBvnGyZkN5k7vmrv6RRcr+GpmszkeUnNge2bZ/JyZ1r/4yZRiJw/3JOeDysbb9agutQv5DWrTsGixxJmCTJfb2DiXtQiO3iEq7VmTUWz3BAeyJtVvErBVrKEO3XdChcvg+2O6iOGxeoyhVzAeY8UCx1yYercvtQNi+6dPxjUNo9OlkSLdkXX+wy1YAkWN7yEgB909sa1OVxge3glcg8Cghxx2moDgeER3EJixlYOqM/BzZ4Co17kNxIxiu2RGxpwQvAarNsQWMMN1kAz4xOJNdwQ0KODP3lYIA64OYFZgMADfCwBHeIvA+brEux6IQ4+QrKTnsjHfcMgJgF9OrWUHDAxTgJjuflzYkDW6WsvF6xFqp+wYzcf8Zz1Lx12ZxQPwJkMZHH1m1g/NSHX5nCmq80nttWZWNdcK2IXPKO9YNeT28NVnG4VdrAhTredGFkQp71WZEWcbum/idvEbeI2cT+I0/VzJxsRQjfbtBL4dWOra0OcdjPHQias/3woIq++AOvrBbm4XL+V416I7VVcAP3DiriKYKBpBGXv8PpRYd3DhBEaLCuB87mT+dHSL+B/C4mo+iXcQ7xKmGjODvmaI0oJbFZi/wDTD8adsQrQzxKSCbEqpw1n6XnRfweTKeBqfk2wsi4e58oJjks3rpLqcAmY8lYlZUF9qlbaVXNXZx1dGxsr8w+IZ1Ypg5LPuQAAAABJRU5ErkJggg==" alt="">
+    <template v-if="store.isLoaded">
+      <div class="profile">
+        <div class="left">
+          <div class="avatar">
+            <img class="img"
+                 :src="store.user?.avatar_url || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ4AAACUCAMAAABVwGAvAAAAY1BMVEXh5uw3S2Dl6vAyR10sQ1kqQVjr7/Vyfozo7fIjPFTd4ukaNk9fbn0PMEvJz9fAx89DVWi4v8iiq7XQ1t2Zoq2rs71/ipdZaHlNXnCSnKdqd4Z5hZKMlqI/UWbW3OOFj5wAJ0RZ1xs9AAAEnElEQVR4nO2ci5aiMAyGIb1AAQuIKCDCvP9TLjo7M+qq0wsJ7jl8T/CflKR/2pQgWFlZWVlZWVlZWVlBB75ZWsk9EMtgqLTOJ7Qekli+j0SQUm+P3aEpQjZxKposanN4C4UAQx0pJfhZWfgJY1yo9FBXSy8zSD02KQ8fwdNwzJcMIYDuQsEeivtUyDu9WATjoX8SuB9EOg7xIuqkLsQv4i4Cm1IuoA7a1EDcBPvY0YuLR2WmbkIdydc3Mlc36csC0gSRRxt10wcYUaqLd3bqzutLlx9xaZKyd/p2ZMsL4YtS/ATGciJ98dE+eGd9NPIgt4/dmbSl+fyy33ayZ1AsL+QbR3XiSCBPdq7BC9MKXR9oV3Hn4oz+9cU75+CF4WlAD5/72k72dIvtDYaTu7opOZDVQW7o8h7CigFXXry1NQM3KI378cm9y4b2TVojy4s8MuPsW3Bz493lObmVH3nIlUVadEAPSGtceZ6ZmyKbFih96l4okE0B6Lcuy0Hls6mxLEGWlxzcrPwFjt/uHj0Kn2ixHUvcexQ+jlxXptyofbYNZEfgZ+ZZgd8LQeEsj3f4na6HKcDecS/y3Lc17C1tAgZXcdO31+DL23kVFmx9Seaxa+B3atrHUKFbAqi9DBV6p9Z7umVkeW/ea7x5p/bm8jwXF7tTa9+7U/MsLNidWuWxaYTsgN2pJc7XBhNij+6WfSwBK9HlVR7q8A2VzyFQWhLciieFY3aIiOLSD0q35GAF/qXQGelU+3hYEQ08SIebIdZosnEMOVrrEzXdMAHk1sVPkYmbkLbJyzPKSSXr4oft4m+xvlrjFaE660NSHmGf2t4CdqeQAtnE/yOvtFrbE/q54z02x3ysoZ6Qk6PF6oqeegAStMU4y4bGDNxg7qtYQS4uAPOWUrX0wYPSOHocvcV4gHFlZt0Sk9WxqSvdkBe9C9JsCFKQmpUfoDRKDrZM8AyPwTnF1N5DjDw9/ljXM2BvIo/YrFxhclTKx6XkmX17pPPoV4A+GcjDP9N7Js+sLiuqce87ZGRk+cR+kbIMyYeJujD8oH2s8Rdp2g3Re+XgnBjG3QZ9IzQZls642RAZuTyrkQJF9NjgG7B78CJIj1iC2Kgi/8AY5Vu6OFeWJ2iM5FT+E1nbPxZibEfz2hSC3jZ2F9Q+IRihisvG8d5FNSVyAEHqjjnf+fFwP8R4AgHy48brsl5seo0lUFb70Ouq/owq+gShxgBUx1/fMptFMO2HuV9ky2H0j9wX6tTOGUGAZDzNErm/MFG0wVwRlFUbOlW6V6Sn3TBHBAF2zavH/a4w0Wy9kzgeauU1ufKKlNWJz04cy20z+7Jeow61dBUIQX3CWNZrmCpqp60YZJ2lyOIuAtOstv4GAcoDn7OWvIDzQ2lVZSZx3YYgcl+wTWcucLIlmbstcYOzTBu5LQCdUUbuC7Y55L9GcIrckTpyX3AWvY7gFLlILCTuIlC8+L3MFLmez2ZL3BDqyQ96IE76+TyTO5ztH9jBeGg52uZqh1B9dVeoZevaf2EgivHmTFB2XhOrs8NUcz26IaMFKt0rbt8DrvLsWOX58J/I+wOob0ayll9qpQAAAABJRU5ErkJggg==' "
+                 alt="Avatar">
+          </div>
+          <div class="name">
+            <span>{{ store.user.name }}</span>
+          </div>
         </div>
-        <div class="name">
-          <span>Username</span>
+
+        <div class="right">
+          <div class="bio">
+            <p>
+              {{ store.user.bio || "Bio.." }}
+            </p>
+          </div>
+          <div class="skills-num">
+            <span class="num">{{ store.user?.skills?.length || 0 }}</span>
+            <span class="skills-num-title">SKILLS</span>
+          </div>
+          <div class="btn-container">
+            <router-link
+                :to="{ name: 'profile.update' , params: { id: store.user.id } }"
+                class="btn">
+              Edit Profile
+            </router-link>
+          </div>
+        </div>
+
+      </div>
+      <div class="skills">
+        <div class="my-skills">
+          <h3>My Skills</h3>
+        </div>
+
+        <div class="skills-list">
+          <span v-for="skill in store.user?.skills"
+                :key="skill.id"
+                class="skill">
+            {{ skill.title }}
+          </span>
         </div>
       </div>
+    </template>
 
-      <div class="right">
-        <div class="bio">
-          <p>
-            Я человек, который ценит развитие, осознанность и движение вперёд. Мне важно понимать,
-            зачем я делаю те или иные вещи, и видеть результат своей работы — будь то обучение,
-          </p>
-        </div>
-        <div class="skills-num">
-          <span class="num">67</span>
-          <span class="skills-num-title">SKILLS</span>
-        </div>
-        <button class="btn" type="submit">
-          Edit Profile
-        </button>
-      </div>
-
+    <div v-else
+        class="loading">
+      <span>Loading profile data<span class="dots"></span></span>
     </div>
-    <div class="skills">
-      <div class="my-skills">
-        <h3>My Skills</h3>
-      </div>
 
-      <div class="skills-list">
-        <span class="skill">Frontend</span>
-        <span class="skill">Backend</span>
-        <span class="skill">DevOps</span>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -114,15 +138,22 @@ defineOptions({
     color: #787878;
   }
 
-  .btn {
+  .btn-container {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 40px;
     background-color: black;
     border: 1px solid #292929;
     border-radius: 10px;
     width: 110px;
     height: 35px;
-    color: white;
     cursor: pointer;
+  }
+
+  .btn {
+    color: white;
   }
 
   .skills {
@@ -148,4 +179,23 @@ defineOptions({
     font-weight: 300;
     border-radius: 50px;
   }
+
+  .loading {
+    margin-top: 50px;
+    font-size: 30px;
+  }
+
+  .dots::after {
+    content: "";
+    animation: dots 1.5s infinite;
+  }
+
+  @keyframes dots {
+    0%   { content: ""; }
+    25%  { content: "."; }
+    50%  { content: ".."; }
+    75%  { content: "..."; }
+    100% { content: ""; }
+  }
+
 </style>

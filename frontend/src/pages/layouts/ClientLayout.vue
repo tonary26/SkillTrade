@@ -1,20 +1,29 @@
 <script setup>
 import {useRouter} from "vue-router"
 import {useAuthStore} from "@/stores/auth.js"
+import {onMounted} from "vue"
+import {useProfileStore} from "@/stores/profile.js"
 
 defineOptions({
   name: 'ClientLayout'
 })
 
-const store = useAuthStore()
+const authStore = useAuthStore()
+const profileStore = useProfileStore();
 
 const router = useRouter()
 
 const logout = async function () {
-  await store.logout()
+  await authStore.logout()
 
   router.push({ name: 'dashboard.index' })
 }
+
+onMounted(async () => {
+  if (authStore.isAuthenticated && !profileStore.user) {
+    await profileStore.show()
+  }
+})
 
 </script>
 
@@ -41,10 +50,16 @@ const logout = async function () {
             class="nav-btn">
           Skills
         </router-link>
+
+        <router-link
+            :to="{ name: 'skill.add' }"
+            class="nav-btn">
+          Create Skill
+        </router-link>
       </div>
 
       <div class="right">
-        <template v-if="!store.isAuthenticated">
+        <template v-if="!authStore.isAuthenticated">
           <router-link
               :to="{ name: 'auth.login.index' }"
               class="nav-btn">
@@ -58,11 +73,18 @@ const logout = async function () {
           </router-link>
         </template>
 
-        <a v-else
-           @click.prevent="logout()"
-           class="nav-btn">
-          Logout
-        </a>
+        <template v-else>
+          <a @click.prevent="logout()"
+             class="nav-btn">
+            Logout
+          </a>
+
+          <router-link
+              :to="{ name: 'profile.index' }"
+              class="nav-btn">
+            Profile
+          </router-link>
+        </template>
       </div>
     </div>
 
@@ -78,6 +100,8 @@ const logout = async function () {
     align-items: center;
     justify-content: space-between;
     position: relative;
+    padding-left: 40px;
+    padding-right: 40px;
     background-color: #000000;
     height: 90px;
   }

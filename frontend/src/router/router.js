@@ -19,6 +19,11 @@ const router = createRouter({
             name: 'skill.show'
         },
         {
+            path: '/skills',
+            component: () => import('@/pages/skills/add.vue'),
+            name: 'skill.add'
+        },
+        {
             path: '/auth/register',
             component: () => import('@/pages/auth/register/index.vue'),
             name: 'auth.register.index'
@@ -32,6 +37,11 @@ const router = createRouter({
             path: '/profile',
             component: () => import('@/pages/profile/index.vue'),
             name: 'profile.index'
+        },
+        {
+            path: '/profile/:id',
+            component: () => import('@/pages/profile/update.vue'),
+            name: 'profile.update'
         }
     ]
 })

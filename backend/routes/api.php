@@ -15,41 +15,55 @@ Route::get('/user', function (Request $request) {
 
 
 Route::prefix('/v1')->middleware('throttle:api')->group(function () {
-        Route::prefix('/categories')->middleware('auth:sanctum')->group(function () {
-            Route::get('/', [CategoryController::class, 'index'])->name('category.index');
-            Route::post('/', [CategoryController::class, 'store'])->name('category.store');
-            Route::get('/{category}', [CategoryController::class, 'show'])->name('category.show');
-            Route::patch('/{category}', [CategoryController::class, 'update'])->name('category.update');
-            Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    Route::prefix('/categories')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])
+            ->name('category.index');
+        Route::post('/', [CategoryController::class, 'store'])
+            ->name('category.store');
+        Route::get('/{category}', [CategoryController::class, 'show'])
+            ->name('category.show');
+        Route::patch('/{category}', [CategoryController::class, 'update'])
+            ->name('category.update');
+        Route::delete('/{category}', [CategoryController::class, 'destroy'])
+            ->name('category.destroy');
+    });
+
+    Route::prefix('/skills')->group(function () {
+        Route::get('/', [SkillController::class, 'index'])->name('skill.index');
+        Route::get('/{skill}', [SkillController::class, 'show'])
+            ->name('skill.show');
+
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/', [SkillController::class, 'store'])
+                ->name('skill.store');
+            Route::patch('/{skill}', [SkillController::class, 'update'])
+                ->name('skill.update');
+            Route::delete('/{skill}', [SkillController::class, 'destroy'])
+                ->name('skill.destroy');
         });
+    });
 
-        Route::prefix('/skills')->group(function () {
-            Route::get('/', [SkillController::class, 'index'])->name('skill.index');
-            Route::get('/{skill}', [SkillController::class, 'show'])->name('skill.show');
-
-            Route::middleware('auth:sanctum')->group(function () {
-                Route::post('/', [SkillController::class, 'store'])->name('skill.store');
-                Route::patch('/{skill}', [SkillController::class, 'update'])->name('skill.update');
-                Route::delete('/{skill}', [SkillController::class, 'destroy'])->name('skill.destroy');
-            });
-        });
-
-        Route::prefix('/exchanges')->middleware('auth:sanctum')->group(function () {
-            Route::get('/', [ExchangeController::class, 'index'])->name('exchange.index');
-            Route::post('/', [ExchangeController::class, 'store'])->name('exchange.store');
-            Route::delete('/{exchange}', [ExchangeController::class, 'destroy'])->name('exchange.destroy');
-        });
-
+    Route::prefix('/exchanges')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [ExchangeController::class, 'index'])
+            ->name('exchange.index');
+        Route::post('/', [ExchangeController::class, 'store'])
+            ->name('exchange.store');
+        Route::delete('/{exchange}', [ExchangeController::class, 'destroy'])
+            ->name('exchange.destroy');
+    });
 
     Route::prefix('/auth')->group(function () {
         Route::post('/register', [AuthController::class, 'register'])
-             ->name('auth.register');
+            ->name('auth.register');
         Route::post('/login', [AuthController::class, 'login'])
-             ->name('auth.login');
+            ->name('auth.login');
         Route::post('/logout', [AuthController::class, 'logout'])
-             ->middleware('auth:sanctum')
-             ->name('auth.logout');
+            ->middleware('auth:sanctum')
+            ->name('auth.logout');
     });
 
-    Route::get('/profile', ProfileController::class)->name('profile.show');
+    Route::prefix('/profile')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+        Route::patch('/{user}', [ProfileController::class, 'update'])->name('profile.update');
+    });
 });
