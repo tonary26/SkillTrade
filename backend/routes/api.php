@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\Category\CategoryController;
+use App\Http\Controllers\Api\V1\Exchange\ExchangeController;
+use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\Skill\SkillController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Exchange\ExchangeController;
-use App\Http\Controllers\Api\V1\ProfileController;
 
 
 Route::get('/user', function (Request $request) {
@@ -64,6 +64,8 @@ Route::prefix('/v1')->middleware('throttle:api')->group(function () {
 
     Route::prefix('/profile')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+        Route::get('/search', [ProfileController::class, 'search'])->name('profile.search');
+        Route::get('/search/{user}', [ProfileController::class, 'get'])->name('profile.get');
         Route::patch('/{user}', [ProfileController::class, 'update'])->name('profile.update');
     });
 });

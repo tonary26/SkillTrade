@@ -19,7 +19,7 @@ const router = createRouter({
             name: 'skill.show'
         },
         {
-            path: '/skills',
+            path: '/skills/add',
             component: () => import('@/pages/skills/add.vue'),
             name: 'skill.add'
         },
@@ -40,6 +40,11 @@ const router = createRouter({
         },
         {
             path: '/profile/:id',
+            component: () => import('@/pages/profile/get.vue'),
+            name: 'profile.get'
+        },
+        {
+            path: '/profile/:id/edit',
             component: () => import('@/pages/profile/update.vue'),
             name: 'profile.update'
         }

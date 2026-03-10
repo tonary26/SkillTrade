@@ -15,7 +15,7 @@ const router = useRouter()
 
 const submitForm = async function () {
   await store.register(form)
-  router.push({ name: 'skill.index' })
+  router.push({ name: 'auth.login.index' })
 }
 
 defineOptions({

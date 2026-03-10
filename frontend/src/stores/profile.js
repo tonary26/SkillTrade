@@ -4,7 +4,9 @@ import api from '@/api'
 export const useProfileStore = defineStore('profile', {
     state: () => ({
         user: null,
-        isLoaded: false
+        profileUser: null,
+        isLoaded: false,
+        users: []
     }),
 
     getters: {
@@ -34,6 +36,40 @@ export const useProfileStore = defineStore('profile', {
                 alert('Profile updated')
             }
             catch(error) {
+                alert(error.message)
+            }
+        },
+
+        async search(query, signal) {
+
+            if (query.length <= 2) {
+                this.users = []
+                return
+            }
+
+            try {
+                const data = await api.get('/profile/search', {
+                    params: { query },
+                    signal
+                })
+                const serverData = data.data
+
+                this.users = serverData.users
+                this.isLoaded = true
+            }
+            catch (error) {
+                alert(error.message)
+            }
+        },
+
+        async get(id) {
+            try {
+                const data = await api.get(`/profile/search/${id}`)
+                const serverData = data.data
+
+                this.profileUser = serverData.user
+            }
+            catch (error) {
                 alert(error.message)
             }
         }

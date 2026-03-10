@@ -1,7 +1,7 @@
 <script setup>
 import {useCategoriesStore} from "@/stores/categories.js"
 import {useSkillsStore} from "@/stores/skills.js"
-import {onMounted, reactive} from "vue"
+import {onMounted, reactive, computed, ref} from "vue"
 import {useRouter} from "vue-router"
 
 defineOptions({
@@ -10,6 +10,8 @@ defineOptions({
 
 const categoriesStore = useCategoriesStore()
 const skillStore = useSkillsStore()
+
+const maxLength = 500
 
 const router = useRouter()
 
@@ -30,6 +32,9 @@ const submitForm = async function () {
 
   router.push({ name: 'skill.index' })
 }
+
+const symbolsLeft = computed(() => maxLength - form.description.length)
+const isLow = computed(() => symbolsLeft.value <= 20)
 
 onMounted(async () => {
   await categoriesStore.getCategories()
@@ -54,11 +59,17 @@ onMounted(async () => {
 
         <div class="input-group">
           <label>Description</label>
-          <input
+          <textarea
               v-model="form.description"
-              class="input"
+              class="textarea-input"
               type="text"
-              placeholder="Enter your skill description">
+              :maxLength="maxLength"
+              placeholder="Enter your skill description (min 100)">
+          </textarea>
+
+          <span :class="['char-counter', { 'danger': isLow }]">
+            {{ form.description.length }} / {{ maxLength }}
+          </span>
         </div>
 
         <div class="input-group">
@@ -150,7 +161,8 @@ h1 {
   margin-left: 10px;
 }
 
-.input {
+.input,
+.textarea-input {
   width: 100%;
   box-sizing: border-box;
   padding: 15px 20px;
@@ -162,10 +174,25 @@ h1 {
   transition: all 0.3s ease;
 }
 
-.input:focus {
+.textarea-input { resize: vertical; }
+
+.input:focus,
+.textarea-input:focus {
   outline: none;
   border-color: #ffffff;
   background: rgba(255, 255, 255, 0.05);
+}
+
+.char-counter {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  text-align: right;
+  transition: color 0.3s ease;
+}
+
+.char-counter.danger {
+  color: red;
 }
 
 .submit-btn {

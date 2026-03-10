@@ -15,8 +15,8 @@ return new class extends Migration
             $table->text('bio')->after('email')
                   ->nullable();
             $table->string('avatar_url')
-                  ->after('bio')
-                  ->default('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8oghbsuzggpkknQSSU-Ch_xep_9v3m6EeBQ&s');
+                  ->nullable()
+                  ->after('bio');
         });
     }
 

@@ -3,7 +3,7 @@ import api from '@/api'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: null,
+        user: JSON.parse(localStorage.getItem('user')),
         token: localStorage.getItem('token')
     }),
 
@@ -28,13 +28,13 @@ export const useAuthStore = defineStore('auth', {
         async login (formData) {
             try {
                 const data = await api.post('/auth/login', formData)
-
                 const serverData = data.data
 
                 this.user = serverData.user
                 this.token = serverData.token
 
                 localStorage.setItem('token', serverData.token)
+                localStorage.setItem('user', JSON.stringify(serverData.user))
 
                 api.defaults.headers.common['Authorization'] = `Bearer ${serverData.token}`
 
@@ -59,6 +59,8 @@ export const useAuthStore = defineStore('auth', {
                 this.token = null
 
                 localStorage.removeItem('token')
+                localStorage.removeItem('user')
+
                 delete api.defaults.headers.common['Authorization']
             }
         }
